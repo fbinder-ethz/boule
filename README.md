@@ -3,49 +3,50 @@
 
 demo: https://faebebin.github.io/boule/
 
+## Pétanque Tournament Manager
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+A browser-based tournament manager for pétanque. All data is stored in `localStorage` — no server required.
 
-## Recommended IDE Setup
+### Leaderboard & Tie-Breaking Rules
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+After each round the ranking is updated using the following criteria **in order**:
 
-## Need an official Svelte framework?
+| Priority | Criterion | Direction |
+|---|---|---|
+| 1 | Wins | Highest first |
+| 2 | Point differential (`PointsDiff`) | Highest first |
+| 3 | Gross points scored (`Pts+`) | Highest first |
+| 4 | Team name | Alphabetical (A → Z) |
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+The `Pts+` column is shown on the final leaderboard so that tie-breaking is transparent.  
+A brief explanation of the criteria is displayed below the leaderboard table.
 
-## Technical considerations
+### Round History After Game Completion
 
-**Why use this over SvelteKit?**
+When the final round is evaluated, the result screen shows a **"View Round Details"** button. Clicking it expands a round-by-round table showing all match scores and outcomes. Round data is never cleared — it remains available in the browser's `localStorage` and in exported JSON files for later review.
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+### Workflow
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+1. **Preparation** – add teams; courts are generated automatically.
+2. **Play** – start the timer, enter scores, stop and evaluate.
+3. **Result** – view the provisional ranking and start the next round, or see the final trophy 🏆 and review round history.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+### Export / Import
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+Use the 📤 / 📥 buttons to export or import a full tournament snapshot as JSON. The export includes all round history so that completed tournaments can be shared or reviewed offline.
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+---
 
-**Why include `.vscode/extensions.json`?**
+## Development
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```bash
+npm install
+npm run dev      # start dev server
+npm run build    # production build
+npm test         # run unit tests (vitest)
 ```
+
+## Technical Considerations
+
+This project uses plain Svelte + Vite without SvelteKit to keep routing minimal. See the Svelte docs for migration guidance if SvelteKit capabilities are needed later.
+
