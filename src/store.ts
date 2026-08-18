@@ -49,6 +49,15 @@ export type Page = "preparation" | "play" | "result";
 
 export const page = persisted<Page>("page", "preparation");
 
+export function rankingComparator(a: Team, b: Team): number {
+	// Tie-break order: 1) wins (desc), 2) pointsDiff (desc),
+	// 3) pointsWon / gross points (desc), 4) name (asc, deterministic)
+	if (b.wins !== a.wins) return b.wins - a.wins;
+	if (b.pointsDiff !== a.pointsDiff) return b.pointsDiff - a.pointsDiff;
+	if (b.pointsWon !== a.pointsWon) return b.pointsWon - a.pointsWon;
+	return (a.name ?? '').localeCompare(b.name ?? '');
+}
+
 function createTeams() {
 	const {subscribe, update} = persisted<Team[]>('teams', []);
 
@@ -62,15 +71,7 @@ function createTeams() {
 	function updateRanking() {
 		update((tl) => {
 
-			tl.sort(
-				// Sort first after wins, then pointsDiff
-				(a, b) => {
-					if (b.wins === a.wins) {
-						return b.pointsDiff - a.pointsDiff
-					}
-					return (b.wins - a.wins)
-				}
-			);
+		tl.sort(rankingComparator);
 
 			tl.forEach((team, index) => {
 				team.rank = index + 1;
