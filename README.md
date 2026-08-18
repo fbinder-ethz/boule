@@ -1,7 +1,7 @@
 # Svelte + TS + Vite
 
 
-demo: https://faebebin.github.io/boule/
+demo: https://binder-ethz.github.io/boule/
 
 ## Pétanque Tournament Manager
 
