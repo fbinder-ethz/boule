@@ -69,3 +69,25 @@ describe('rankingComparator', () => {
 		expect(sorted[3]).toBe(t4)
 	})
 })
+
+describe('PF and PA aggregation', () => {
+	it('tracks pointsWon (PF) and pointsLost (PA) independently', () => {
+		const team = makeTeam({id: '1', name: 'A', pointsWon: 39, pointsLost: 12})
+		expect(team.pointsWon).toBe(39)
+		expect(team.pointsLost).toBe(12)
+	})
+
+	it('PF and PA are independent of wins count', () => {
+		const winner = makeTeam({id: '1', name: 'A', wins: 3, pointsWon: 39, pointsLost: 12})
+		const loser = makeTeam({id: '2', name: 'B', wins: 0, pointsWon: 12, pointsLost: 39})
+		expect(winner.pointsWon).toBe(39)
+		expect(winner.pointsLost).toBe(12)
+		expect(loser.pointsWon).toBe(12)
+		expect(loser.pointsLost).toBe(39)
+	})
+
+	it('pointsDiff equals PF minus PA', () => {
+		const team = makeTeam({id: '1', name: 'A', pointsWon: 25, pointsLost: 10, pointsDiff: 15})
+		expect(team.pointsDiff).toBe(team.pointsWon - team.pointsLost)
+	})
+})

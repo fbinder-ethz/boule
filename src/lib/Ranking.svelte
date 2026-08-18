@@ -46,10 +46,17 @@
         sortable: true,
       },
       {
-        key: "pointsWon",
-        label: "Pts+",
-        title: trans("points_won"),
+        key: "pf",
+        label: "PF",
+        title: "Points For",
         value: (row) => row.pointsWon,
+        sortable: true,
+      },
+      {
+        key: "pa",
+        label: "PA",
+        title: "Points Against",
+        value: (row) => row.pointsLost,
         sortable: true,
       }
     );
@@ -58,7 +65,7 @@
 
 {#if showRank}
   <p class="ranking-info">
-    Ranking criteria (in order): 1. Wins · 2. Point differential · 3. Gross points scored (Pts+) · 4. Team name (alphabetical)
+    Ranking criteria (in order): 1. Wins · 2. Point differential · 3. Points For (PF) · 4. Team name (alphabetical)
   </p>
 {/if}
 
